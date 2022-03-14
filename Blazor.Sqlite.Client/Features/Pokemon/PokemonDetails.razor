@@ -1,0 +1,33 @@
+﻿@page "/pokemons/{Id:int}"
+
+@if (_pokemon is null)
+{
+    <MudSkeleton></MudSkeleton>
+}
+else
+{
+    <div class="d-flex justify-center" style="width: 100%;">
+        <MudImage Style="width: 100%; max-width: 450px;" Class="rounded" Src="@_pokemonImage" Alt="" Elevation="4"></MudImage>
+    </div>
+    <div class="d-flex flex-column align-center mt-16">
+        <div class="d-flex flex-column align-center">
+            <MudText Style="text-transform: capitalize;" Typo="Typo.h5">@_pokemon.Name</MudText>
+            <div class="d-flex" style="width: 100%">
+                @foreach (var type in _pokemon.PokemonToTypes)
+                {
+                    <MudChip Style="@($"text-transform: capitalize; color:white; background-color: {GetColor(type.PokemonType.Name)}")">@type.PokemonType.Name</MudChip>
+                }
+            </div>
+        </div>
+        <div class="d-flex align-center justify-space-around mt-8" style="width: 100%;">
+            <div class="d-flex flex-column align-center">
+                <MudText Typo="Typo.h6">@_pokemon.Weight</MudText>
+                <MudText Typo="Typo.subtitle1">Weight</MudText>
+            </div>
+            <div class="d-flex flex-column align-center">
+                <MudText Typo="Typo.h6">@_pokemon.Height</MudText>
+                <MudText Typo="Typo.subtitle1">Height</MudText>
+            </div>
+        </div>
+    </div>
+}

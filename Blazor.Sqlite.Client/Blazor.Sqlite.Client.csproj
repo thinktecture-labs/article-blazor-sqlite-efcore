@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<PublishTrimmed>true</PublishTrimmed>
+		<EmccExtraLDFlags>-lidbfs.js -s ERROR_ON_UNDEFINED_SYMBOLS=0</EmccExtraLDFlags>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <Content Remove="wwwroot\js\file.js" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.2" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.2" PrivateAssets="all" />
+		<PackageReference Include="MudBlazor" Version="6.0.6" />
+		<!-- EF Core and SQLite support -->
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.2" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.3" />
+		<PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="2.1.0-pre20220207221914" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="wwwroot\js\file.js">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Update="wwwroot\sample-data\contributions.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Update="wwwroot\sample-data\speakers.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	</ItemGroup>
+
+</Project>

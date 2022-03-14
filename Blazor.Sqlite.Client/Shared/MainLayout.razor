@@ -1,0 +1,42 @@
+﻿@inherits LayoutComponentBase
+
+<MudThemeProvider Theme="@DefaultTheme" />
+<MudSnackbarProvider />
+<MudLayout>
+    <MudAppBar>
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" OnClick="ToggleMenu"></MudIconButton>
+        <MudHidden Breakpoint="Breakpoint.Md" Invert="true">
+            <MudText Typo="Typo.h5"> EF Core with Sqlite in Blazor WASM</MudText>
+        </MudHidden>
+        <MudHidden Breakpoint="Breakpoint.Md">
+            <MudText Typo="Typo.h6" Class="truncate"> EF Core with Sqlite in Blazor WASM</MudText>
+        </MudHidden>
+        <MudSpacer />
+    </MudAppBar>
+    <MudDrawer @bind-Open="_open" Breakpoint="Breakpoint.Md" Elevation="2" Variant="DrawerVariant.Mini" ClipMode="DrawerClipMode.Docked">
+        <MudNavMenu>
+            <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Dashboard" Href="/">Dashboard</MudNavLink>
+            <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Checklist" Href="/todos">Todos</MudNavLink>
+            <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.ViewList" Href="/contributions">Contributions</MudNavLink>
+            <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Material.TwoTone.CatchingPokemon" Href="/pokemons">Pokemons</MudNavLink>
+        </MudNavMenu>
+    </MudDrawer>
+    <MudMainContent>
+        <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="pa-4">
+            @if (_isInitialized)
+            {
+                @Body
+            }
+            else
+            {
+                <div class="d-flex flex-column align-center justify-center" style="height: calc(100vh - 96px)">
+                    <MudProgressLinear Color="Color.Primary" Size="Size.Small" Indeterminate="true">
+                    </MudProgressLinear>
+                    <MudText Typo="Typo.body1">Initialize App</MudText>
+                </div>
+            }
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
+
+

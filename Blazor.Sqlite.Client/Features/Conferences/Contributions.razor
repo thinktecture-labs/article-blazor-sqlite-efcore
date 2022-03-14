@@ -1,0 +1,23 @@
+﻿@page "/contributions"
+
+@if (_isInitilazing)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <Virtualize ItemsProvider="LoadCollection" Context="contribution">
+        <ItemContent>
+            <div class="d-flex flex-column align-center mud-elevation-4 py-8 px-10 mb-8 rounded white">
+                <MudText Class="flex-1" Style="text-transform: capitalize;">@contribution.Title</MudText>
+                <MudText Typo="Typo.caption">Speakers: @SpeakerString(contribution)</MudText>
+            </div>
+        </ItemContent>
+        <Placeholder>
+            <div class="d-flex align-center mud-elevation-4 py-8 px-10 mb-8 rounded white">
+                <MudSkeleton Class="flex-1" Style="width: 100%" />
+            </div>
+        </Placeholder>
+    </Virtualize>
+}
+

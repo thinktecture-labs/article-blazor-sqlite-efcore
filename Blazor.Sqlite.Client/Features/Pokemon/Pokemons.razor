@@ -1,0 +1,23 @@
+﻿@page "/pokemons"
+
+@if (_isInitilazing)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <Virtualize ItemsProvider="LoadCollection" Context="pokemon">
+        <ItemContent>
+            <div class="d-flex align-center mud-elevation-4 py-8 px-10 mb-8 rounded white" @onclick="() => OpenPokemonDetails(pokemon.Id)">
+                <MudAvatar Style="width: 60px; height: 60px;" Image="@GetPokemonImage(pokemon.Id)" />
+                <MudText Class="ml-4 flex-1" Style="text-transform: capitalize;">@pokemon.Name</MudText>
+            </div>
+        </ItemContent>
+        <Placeholder>
+            <div class="d-flex align-center mud-elevation-4 py-8 px-10 mb-8 rounded white">
+                <MudSkeleton SkeletonType="SkeletonType.Circle" Width="60px" Height="60px" />
+                <MudSkeleton Class="ml-4 flex-1" Style="width: 100%" />
+            </div>
+        </Placeholder>
+    </Virtualize>
+}
