@@ -4,6 +4,9 @@ using Blazor.Sqlite.Client.Features.Conferences.Services;
 using Blazor.Sqlite.Client.Features.Pokemon.Services;
 using Blazor.Sqlite.Client.Features.Todos.Services;
 using Blazor.Sqlite.Client.Services;
+using GraphQL.Client.Abstractions;
+using GraphQL.Client.Http;
+using GraphQL.Client.Serializer.SystemTextJson;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Data.Sqlite;
@@ -16,25 +19,25 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 #if DEBUG
-var connectionStringBuilder = new SqliteConnectionStringBuilder { DataSource = ":memory:" };
-var connection = new SqliteConnection(connectionStringBuilder.ToString());
 builder.Services.AddDbContext<DatabaseContext>(
-            options => options.UseSqlite(connection));
+            options => options.UseInMemoryDatabase("BlazorSqlite"));
 #else
 builder.Services.AddDbContextFactory<DatabaseContext>(
             options => options.UseSqlite($"Filename=/database/app.db"));
 #endif
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-
 builder.Services.AddMudServices();
 
-builder.Services.AddScoped<DatabaseService>();
+builder.Services.AddSingleton<DatabaseService>();
 builder.Services.AddScoped<PokemonService>();
 builder.Services.AddScoped<ContributionsService>();
 builder.Services.AddScoped<TodosService>();
 
 var host = builder.Build();
+
+var dbService = host.Services.GetRequiredService<DatabaseService>();
+await dbService.InitDatabaseAsync();
 await host.RunAsync();
 
 public partial class Program

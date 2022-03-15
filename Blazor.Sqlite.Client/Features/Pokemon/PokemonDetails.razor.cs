@@ -10,13 +10,20 @@ namespace Blazor.Sqlite.Client.Features.Pokemon
 
         [Inject] private PokemonService _pokemonService { get; set; } = default!;
         [Parameter] public int Id { get; set; }
+        [Parameter] public string Name { get; set; } = string.Empty;
 
         private PokemonEntity? _pokemon;
+        private string? _name;
+        private string? _flavorText;
         private string _pokemonImage => String.Format(ImageBaseUrl, Id);
+        private bool _isInitialized = false;
 
         protected override async Task OnInitializedAsync()
         {
             _pokemon = await _pokemonService.GetPokemonAsync(Id);
+            _name =  _pokemon?.PokemonNames?.FirstOrDefault(n => n.Language.Name.Contains("de"))?.Name;
+            _flavorText =  _pokemon?.FlavorTextEntries?.FirstOrDefault(f => f.Language.Name.Contains("de"))?.FlavorText;
+            _isInitialized = true;
             await base.OnInitializedAsync();
         }
 
@@ -62,6 +69,25 @@ namespace Blazor.Sqlite.Client.Features.Pokemon
                     return "#2C53E1";
                 default:
                     return "#74515B";
+            }
+        }
+
+        public MudBlazor.Color GetStatColor()
+        {
+            if (_pokemon?.PokemonColor == null)
+            {
+                return MudBlazor.Color.Default;
+            }
+            switch(_pokemon.PokemonColor.Name)
+            {
+                case "green":
+                    return MudBlazor.Color.Success;
+                case "blue":
+                    return MudBlazor.Color.Info;
+                case "red":
+                    return MudBlazor.Color.Error;
+                default:
+                    return MudBlazor.Color.Default;
             }
         }
     }

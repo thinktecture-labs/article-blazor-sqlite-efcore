@@ -1,25 +1,32 @@
-﻿@page "/pokemons/{Id:int}"
+﻿@page "/pokemons/{Id:int}/{Name}"
 
-@if (_pokemon is null)
+@if (!_isInitialized)
 {
     <MudSkeleton></MudSkeleton>
+}
+else if (_pokemon is null)
+{
+    <MudAlert Severity="Severity.Warning">Pokemon not found!</MudAlert>
 }
 else
 {
     <div class="d-flex justify-center" style="width: 100%;">
-        <MudImage Style="width: 100%; max-width: 450px;" Class="rounded" Src="@_pokemonImage" Alt="" Elevation="4"></MudImage>
+        <MudImage Style="width: 100%; max-width: 450px;" Class="@(_pokemon.PokemonColor != null ? $"rounded {_pokemon.PokemonColor.Name}" : "rounded")" Src="@_pokemonImage" Alt="" Elevation="4"></MudImage>
     </div>
     <div class="d-flex flex-column align-center mt-16">
         <div class="d-flex flex-column align-center">
-            <MudText Style="text-transform: capitalize;" Typo="Typo.h5">@_pokemon.Name</MudText>
+            <MudText Style="text-transform: capitalize;" Typo="Typo.h5">@(String.IsNullOrWhiteSpace(_name) ? _pokemon.Name : _name)</MudText>
             <div class="d-flex" style="width: 100%">
                 @foreach (var type in _pokemon.PokemonToTypes)
                 {
-                    <MudChip Style="@($"text-transform: capitalize; color:white; background-color: {GetColor(type.PokemonType.Name)}")">@type.PokemonType.Name</MudChip>
+                    <MudChip Class="mud-elevation-4" Style="@($"text-transform: capitalize; color:white; background-color: {GetColor(type.PokemonType.Name)}")">@type.PokemonType.Name</MudChip>
                 }
             </div>
         </div>
-        <div class="d-flex align-center justify-space-around mt-8" style="width: 100%;">
+        <div div class="d-flex align-center justify-center my-8" style="width: 100%">
+            <MudText Style="text-align: center;">@_flavorText</MudText>
+        </div>
+        <div class="d-flex align-center justify-space-around mb-8" style="width: 100%;">
             <div class="d-flex flex-column align-center">
                 <MudText Typo="Typo.h6">@_pokemon.Weight</MudText>
                 <MudText Typo="Typo.subtitle1">Weight</MudText>
@@ -28,6 +35,14 @@ else
                 <MudText Typo="Typo.h6">@_pokemon.Height</MudText>
                 <MudText Typo="Typo.subtitle1">Height</MudText>
             </div>
+        </div>
+        <div style="width: 100%; display: grid; grid-template-columns: min-content min-content 1fr; column-gap: 1rem; row-gap: 0.6rem;">
+            @foreach (var stat in _pokemon.PokemonStats)
+            {
+                <MudText Style="white-space: nowrap; text-transform: capitalize;" Typo="Typo.h6">@stat.Stat.Name</MudText>
+                <MudText Style="white-space: nowrap; text-transform: capitalize;" Typo="Typo.subtitle1">@stat.BaseStat</MudText>
+                <MudProgressLinear Style="align-self: center" Color="GetStatColor()" Rounded="true" Size="Size.Large" Value="@stat.BaseStat" />
+            }
         </div>
     </div>
 }

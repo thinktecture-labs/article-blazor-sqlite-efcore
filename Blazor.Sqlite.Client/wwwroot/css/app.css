@@ -1,5 +1,22 @@
-﻿html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+﻿:root {
+    --mud-typography-default-family: Fredoka, 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+    --mud-typography-h1-family: Fredoka, 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+    --mud-typography-h2-family: Fredoka, 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+    --mud-typography-h3-family: Fredoka, 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+    --mud-typography-h4-family: Fredoka, 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+    --mud-typography-h5-family: Fredoka, 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+    --mud-typography-h6-family: Fredoka, 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+    --mud-typography-subtitle1-family: Fredoka, 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+    --mud-typography-subtitle2-family: Fredoka, 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+    --mud-typography-body1-family: Fredoka, 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+    --mud-typography-body2-family: Fredoka, 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+    --mud-typography-button-family: Fredoka, 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+    --mud-typography-caption-family: Fredoka, 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+    --mud-typography-overline-family: Fredoka, 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+}
+
+html, body {
+    font-family: Fredoka, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 h1:focus {

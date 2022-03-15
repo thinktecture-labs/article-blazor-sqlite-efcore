@@ -8,8 +8,8 @@ else
 {
     <Virtualize ItemsProvider="LoadCollection" Context="pokemon">
         <ItemContent>
-            <div class="d-flex align-center mud-elevation-4 py-8 px-10 mb-8 rounded white" @onclick="() => OpenPokemonDetails(pokemon.Id)">
-                <MudAvatar Style="width: 60px; height: 60px;" Image="@GetPokemonImage(pokemon.Id)" />
+            <div class="d-flex align-center mud-elevation-4 mb-8 rounded white" @onclick="() => OpenPokemonDetails(pokemon.Id, pokemon.Name)">
+                <MudAvatar Style="width: 80px; height: 80px; background-color: white;" Image="@GetPokemonImage(pokemon.Id)" />
                 <MudText Class="ml-4 flex-1" Style="text-transform: capitalize;">@pokemon.Name</MudText>
             </div>
         </ItemContent>

@@ -14,6 +14,6 @@ namespace Blazor.Sqlite.Client.Features.Pokemon.Models
         public object Previous { get; set; }
 
         [JsonPropertyName("results")]
-        public List<Pokemon> Results { get; set; }
+        public List<PokemonOverview> Results { get; set; }
     }
 }

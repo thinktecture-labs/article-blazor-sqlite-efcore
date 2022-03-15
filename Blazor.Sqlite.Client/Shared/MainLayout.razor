@@ -23,7 +23,7 @@
     </MudDrawer>
     <MudMainContent>
         <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="pa-4">
-            @if (_isInitialized)
+            @*@if (_isInitialized)
             {
                 @Body
             }
@@ -34,7 +34,8 @@
                     </MudProgressLinear>
                     <MudText Typo="Typo.body1">Initialize App</MudText>
                 </div>
-            }
+            }*@
+            @Body
         </MudContainer>
     </MudMainContent>
 </MudLayout>

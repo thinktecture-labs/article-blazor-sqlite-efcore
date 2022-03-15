@@ -1,25 +1,21 @@
-﻿export function mount(ref) {
+﻿export function mountAndInitializeDb() {
     FS.mkdir('/database');
     FS.mount(IDBFS, {}, '/database');
-    FS.syncfs(true, function (err) {
-        if (!!err) {
-            console.log('syncfs failed. Error:', err);
-            ref.invokeMethodAsync('FinishSync', false);
-        }
-        else {
-            console.log('synced successfull.');
-            ref.invokeMethodAsync('FinishSync', true);
-        }
-    });
+    return syncDatabase();
 }
 
-export function sync() {
-    FS.syncfs(function (err) {
-        if (err) {
-            console.log('syncfs failed. Error:', err);
-        }
-        else {
-            console.log('synced successfull.');
-        }
+export function syncDatabase() {
+
+    return new Promise((resolve, reject) => {
+        FS.syncfs((err) => {
+            if (err) {
+                console.log('syncfs failed. Error:', err);
+                reject(err);
+            }
+            else {
+                console.log('synced successfull.');
+                resolve();
+            }
+        });
     });
 }

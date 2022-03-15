@@ -4,7 +4,7 @@ using Microsoft.JSInterop;
 
 namespace Blazor.Sqlite.Client.Services
 {
-    public class DatabaseService : IDisposable
+    public class DatabaseService
     {
 #if DEBUG
         private static string filename = "app.db";
@@ -14,10 +14,7 @@ namespace Blazor.Sqlite.Client.Services
         private readonly IDbContextFactory<DatabaseContext> _dbContextFactory;
 
         private readonly Lazy<Task<IJSObjectReference>> _moduleTask;
-        private readonly DotNetObjectReference<DatabaseService> _selfReference;
-        
 
-        public event EventHandler<SyncFinishedEvent> SyncFinished;
 
 #if DEBUG
         public DatabaseService()
@@ -32,18 +29,8 @@ namespace Blazor.Sqlite.Client.Services
 
             _moduleTask = new(() => jsRuntime.InvokeAsync<IJSObjectReference>(
                "import", "./js/file.js").AsTask());
-            _selfReference = DotNetObjectReference.Create(this);
         }
 #endif
-
-        [JSInvokable]
-        public void FinishSync(bool successful)
-        {
-            SyncFinished?.Invoke(this, new SyncFinishedEvent
-            {
-                Successfull = successful
-            });
-        }
 
         public async Task InitDatabaseAsync()
         {
@@ -51,19 +38,14 @@ namespace Blazor.Sqlite.Client.Services
             {
 #if RELEASE
                 var module = await _moduleTask.Value;
-                await module.InvokeVoidAsync("mount", _selfReference);
+                await module.InvokeVoidAsync("mountAndInitializeDb");
                 if (!File.Exists(filename))
                 {
                     File.Create(filename).Close();
                 }
 
                 var dbContext = await _dbContextFactory.CreateDbContextAsync();
-                await dbContext.Database.EnsureCreatedAsync();
-#else
-                SyncFinished?.Invoke(this, new SyncFinishedEvent
-                {
-                    Successfull = true
-                });
+                await dbContext.Database.EnsureCreatedAsync();     
 #endif
             }
             catch (Exception ex)
@@ -71,12 +53,5 @@ namespace Blazor.Sqlite.Client.Services
                 Console.WriteLine(ex.GetType().Name, ex.Message);
             }
         }
-        
-        public void Dispose() => _selfReference?.Dispose();
-    }
-
-    public class SyncFinishedEvent : EventArgs
-    {
-        public bool Successfull { get; set; }
     }
 }

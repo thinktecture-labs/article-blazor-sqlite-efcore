@@ -25,12 +25,12 @@ namespace Blazor.Sqlite.Client.Features.Pokemon
             return String.Format(ImageBaseUrl, id);
         }
 
-        private void OpenPokemonDetails(int id)
+        private void OpenPokemonDetails(int id, string name)
         {
-            NavigationManager.NavigateTo($"/pokemons/{id}");
+            NavigationManager.NavigateTo($"/pokemons/{id}/{name}");
         }
 
-        private async ValueTask<ItemsProviderResult<Models.Pokemon>> LoadCollection(
+        private async ValueTask<ItemsProviderResult<Models.PokemonOverview>> LoadCollection(
         ItemsProviderRequest request)
         {
             try
@@ -38,12 +38,12 @@ namespace Blazor.Sqlite.Client.Features.Pokemon
                 var count = await PokemonService.GetPokemonCountAsync(request.CancellationToken);
                 var totalCount = Math.Min(request.Count, count - request.StartIndex);
                 var result = await PokemonService.GetPokemonCollectionAsync(request.StartIndex, totalCount, request.CancellationToken);
-                return new ItemsProviderResult<Models.Pokemon>(result, count);
+                return new ItemsProviderResult<Models.PokemonOverview>(result, count);
             }
             catch (OperationCanceledException)
             {
                 Console.WriteLine("Current request was canceled.");
-                return new ItemsProviderResult<Models.Pokemon>(new List<Models.Pokemon>(), 0);
+                return new ItemsProviderResult<Models.PokemonOverview>(new List<Models.PokemonOverview>(), 0);
             }
         }
     }
