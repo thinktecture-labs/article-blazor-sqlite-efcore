@@ -89,6 +89,7 @@ namespace Blazor.Sqlite.Client.Features.Pokemon.Services
                                 .ThenInclude(pn => pn.Language)
                             .Include(p => p.FlavorTextEntries)
                                 .ThenInclude(pn => pn.Language)
+                            .AsSplitQuery()
                             .FirstOrDefaultAsync(p => p.Id == id);
 
                         return result;

@@ -141,7 +141,7 @@ namespace Blazor.Sqlite.Client.Data
         {
             Console.WriteLine("Start saving database");
             var module = await _moduleTask.Value;
-            await module.InvokeVoidAsync("syncDatabase", cancellationToken);
+            await module.InvokeVoidAsync("syncDatabase", false, cancellationToken);
             Console.WriteLine("Finish save database");
         }
     }

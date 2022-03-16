@@ -4,12 +4,8 @@ using MudBlazor;
 
 namespace Blazor.Sqlite.Client.Shared
 {
-    public partial class MainLayout // : IDisposable
+    public partial class MainLayout
     {
-        // [Inject] private DatabaseService DatabaseService { get; set; } = default!;
-
-        // private bool _isInitialized;
-
         private bool _open;
         private static readonly MudTheme DefaultTheme = new()
         {
@@ -27,36 +23,9 @@ namespace Blazor.Sqlite.Client.Shared
             }
         };
 
-        //protected override void OnInitialized()
-        //{
-        //    DatabaseService.SyncFinished += DatabaseService_SyncFinished;
-        //    base.OnInitialized();
-        //}
-
-        //private void DatabaseService_SyncFinished(object? sender, SyncFinishedEvent e)
-        //{
-        //    _isInitialized = true;
-        //    InvokeAsync(StateHasChanged);
-        //}
-
-        //protected override async Task OnAfterRenderAsync(bool firstRender)
-        //{
-        //    if (firstRender)
-        //    {
-        //        Console.WriteLine("App | OnAfterRenderAsync | Start initialize database");
-        //        await DatabaseService.InitDatabaseAsync();
-        //    }
-        //    await base.OnAfterRenderAsync(firstRender);
-        //}
-
         private void ToggleMenu()
         {
             _open = !_open;
         }
-
-        //public void Dispose()
-        //{
-        //    DatabaseService.SyncFinished -= DatabaseService_SyncFinished;
-        //}
     }
 }

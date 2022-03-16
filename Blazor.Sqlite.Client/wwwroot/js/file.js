@@ -1,13 +1,13 @@
 ﻿export function mountAndInitializeDb() {
     FS.mkdir('/database');
     FS.mount(IDBFS, {}, '/database');
-    return syncDatabase();
+    return syncDatabase(true);
 }
 
-export function syncDatabase() {
+export function syncDatabase(populate) {
 
     return new Promise((resolve, reject) => {
-        FS.syncfs((err) => {
+        FS.syncfs(populate, (err) => {
             if (err) {
                 console.log('syncfs failed. Error:', err);
                 reject(err);
