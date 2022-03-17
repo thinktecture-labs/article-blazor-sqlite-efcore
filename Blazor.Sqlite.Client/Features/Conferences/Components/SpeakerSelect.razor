@@ -1,0 +1,14 @@
+﻿@using Blazor.Sqlite.Client.Features.Conferences.Models
+@if (_speakers.Count > 0)
+{
+    <MudSelect Label="@Label" T=int MultiSelection="true" SelectedValues="_selectedSpeakers" SelectedValuesChanged="OnSpeakerSelectionChanged" ToStringFunc="GetSpeakerString">
+        @foreach(var speaker in _speakers)
+        {
+            <MudSelectItem Value="speaker.Id">@speaker.FirstName @speaker.LastName</MudSelectItem>
+        }
+    </MudSelect>
+}
+else
+{
+    <MudAlert Severity="Severity.Warning">No speakers available.</MudAlert>
+}

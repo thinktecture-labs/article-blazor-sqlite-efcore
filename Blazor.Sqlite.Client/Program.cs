@@ -1,12 +1,7 @@
 using Blazor.Sqlite.Client;
 using Blazor.Sqlite.Client.Data;
 using Blazor.Sqlite.Client.Features.Conferences.Services;
-using Blazor.Sqlite.Client.Features.Pokemon.Services;
-using Blazor.Sqlite.Client.Features.Todos.Services;
 using Blazor.Sqlite.Client.Services;
-using GraphQL.Client.Abstractions;
-using GraphQL.Client.Http;
-using GraphQL.Client.Serializer.SystemTextJson;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Data.Sqlite;
@@ -30,9 +25,7 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 builder.Services.AddMudServices();
 
 builder.Services.AddSingleton<DatabaseService>();
-builder.Services.AddScoped<PokemonService>();
 builder.Services.AddScoped<ContributionsService>();
-builder.Services.AddScoped<TodosService>();
 
 var host = builder.Build();
 

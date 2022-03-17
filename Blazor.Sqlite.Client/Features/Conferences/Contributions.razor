@@ -1,16 +1,32 @@
 ﻿@page "/contributions"
 
+<PageTitle>Thinktecture Contributions</PageTitle>
+<MudAppBar Elevation="2">
+    <MudIconButton Icon="@Icons.Filled.ArrowBack" OnClick="NavigateBack"></MudIconButton>
+    <MudSpacer />
+    <MudText Typo="Typo.h5">Contributions</MudText>
+    <MudSpacer />
+    <MudIconButton Style="@(_isInitilazing ? "opacity: 0" : "opacity: 1")" Icon="@Icons.Outlined.AddCircle" OnClick="() => CreateOrUpdateContribution()"></MudIconButton>    
+</MudAppBar>
+
+
 @if (_isInitilazing)
 {
     <p>Loading...</p>
 }
 else
 {
-    <Virtualize ItemsProvider="LoadCollection" Context="contribution">
+    <Virtualize @ref="_virtualize" ItemsProvider="LoadCollection" Context="contribution">
         <ItemContent>
-            <div class="d-flex flex-column align-center mud-elevation-4 py-8 px-10 mb-8 rounded white">
-                <MudText Class="flex-1" Style="text-transform: capitalize;">@contribution.Title</MudText>
-                <MudText Typo="Typo.caption">Speakers: @SpeakerString(contribution)</MudText>
+            <div class="d-flex justify-space-between mud-elevation-4 py-8 px-10 mb-8 rounded white item-row">
+                <div class="d-flex flex-column flex-start">
+                    <MudText Class="flex-1" Style="text-transform: capitalize;">@contribution.Title</MudText>
+                    <MudText Typo="Typo.caption">Speakers: @SpeakerString(contribution)</MudText>
+                </div>
+                <div class="d-flex edit-action">
+                    <MudIconButton Icon="@Icons.Filled.Edit" OnClick="() => CreateOrUpdateContribution(contribution)"></MudIconButton>
+                    <MudIconButton Icon="@Icons.Filled.Delete" OnClick="() => DeleteContribution(contribution.Id)"></MudIconButton>
+                </div>
             </div>
         </ItemContent>
         <Placeholder>

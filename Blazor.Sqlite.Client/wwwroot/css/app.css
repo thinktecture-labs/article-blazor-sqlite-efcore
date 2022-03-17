@@ -58,6 +58,10 @@ h1:focus {
     text-overflow: ellipsis;
 }
 
+.full-width {
+    width: 100%;
+}
+
 /*Mud Blazor overrides*/
 .mud-navmenu.mud-navmenu-default .mud-nav-link.active:not(.mud-nav-link-disabled) {
     color: #3d6fb4 !important;
@@ -65,4 +69,8 @@ h1:focus {
 
 .mud-nav-link.active:not(.mud-nav-link-disabled) .mud-nav-link-icon.mud-nav-link-icon-default {
     color: #3d6fb4 !important;
+}
+
+.mud-appbar .mud-toolbar-appbar {
+    padding-left: 4px !important;
 }

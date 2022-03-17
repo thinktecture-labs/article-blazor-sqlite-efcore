@@ -1,0 +1,12 @@
+﻿.edit-action {
+    opacity: 0;
+    pointer-events: none;
+    cursor: auto;
+    transition: opacity .3s ease-in-out;
+}
+
+.item-row:hover .edit-action {
+    opacity: 1;
+    cursor: pointer;
+    pointer-events: all;
+}

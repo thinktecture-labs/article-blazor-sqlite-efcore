@@ -1,5 +1,4 @@
 ﻿using Blazor.Sqlite.Client.Features.Conferences.Models;
-using Blazor.Sqlite.Client.Features.Pokemon.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.JSInterop;
 using MudBlazor;
@@ -9,19 +8,6 @@ namespace Blazor.Sqlite.Client.Data
     public class DatabaseContext : DbContext
     {
         public DbSet<TodoItem> Todos { get; set; }
-        public DbSet<PokemonOverview> Pokemons { get; set; }
-        public DbSet<PokemonEntity> PokemonData { get; set; }
-        public DbSet<Sprites> Sprites { get; set; }
-        public DbSet<Form> Forms { get; set; }
-        public DbSet<PokemonLanguage> PokemonLanguages { get; set; }
-        public DbSet<PokemonName> PokemonNames { get; set; }
-        public DbSet<FlavorTextEntry> FlavorTextEntries { get; set; }
-        public DbSet<PokemonColor> PokemonColors { get; set; }
-        public DbSet<PokemonType> PokemonTypes { get; set; }
-        public DbSet<PokemonForm> PokemonForms { get; set; }
-        public DbSet<PokemonToType> PokemonToTypes { get; set; }
-        public DbSet<Stat> Stats { get; set; }
-        public DbSet<PokemonStat> PokemonStats { get; set; }
         public DbSet<Contribution> Contributions { get; set; }
         public DbSet<Speaker> Speakers { get; set; }
         public DbSet<ContributionSpeaker> ContributionSpeakers { get; set; }
@@ -38,71 +24,6 @@ namespace Blazor.Sqlite.Client.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<PokemonColor>()
-               .HasMany(c => c.PokemonEntities)
-               .WithOne(e => e.PokemonColor)
-               .HasForeignKey(c => c.PokemonColorId);
-
-            modelBuilder.Entity<PokemonLanguage>()
-               .HasMany(l => l.PokemonNames)
-               .WithOne(e => e.Language)
-               .HasForeignKey(l => l.LanguageId);
-
-            modelBuilder.Entity<PokemonLanguage>()
-               .HasMany(c => c.FlavorTextEntries)
-               .WithOne(e => e.Language)
-               .HasForeignKey(c => c.LanguageId);
-
-
-            modelBuilder.Entity<FlavorTextEntry>()
-                .HasOne(c => c.PokemonEntity)
-                .WithMany(e => e.FlavorTextEntries)
-                .HasForeignKey(e => e.PokemonEntityId);
-
-            modelBuilder.Entity<PokemonEntity>()
-               .HasMany(c => c.PokemonNames)
-               .WithOne(e => e.PokemonEntity)
-               .HasForeignKey(e => e.PokemonEntityId);
-
-            modelBuilder.Entity<PokemonStat>()
-                .HasKey(ps => new { ps.PokemonEntityId, ps.StatId });
-
-            modelBuilder.Entity<PokemonStat>()
-                .HasOne(pt => pt.PokemonEntity)
-                .WithMany(p => p.PokemonStats)
-                .HasForeignKey(pt => pt.PokemonEntityId);
-
-            modelBuilder.Entity<PokemonStat>()
-                .HasOne(pt => pt.Stat)
-                .WithMany(p => p.PokemonStats)
-                .HasForeignKey(pt => pt.StatId);
-
-            modelBuilder.Entity<PokemonForm>()
-                .HasKey(pf => new { pf.PokemonEntityId, pf.FormId });
-
-            modelBuilder.Entity<PokemonForm>()
-                .HasOne(pt => pt.PokemonEntity)
-                .WithMany(p => p.PokemonForms)
-                .HasForeignKey(pt => pt.PokemonEntityId);
-
-            modelBuilder.Entity<PokemonForm>()
-                .HasOne(pt => pt.Form)
-                .WithMany(p => p.PokemonForms)
-                .HasForeignKey(pt => pt.FormId);
-
-            modelBuilder.Entity<PokemonToType>()
-                .HasKey(pf => new { pf.PokemonEntityId, pf.PokemonTypeId });
-
-            modelBuilder.Entity<PokemonToType>()
-                .HasOne(pt => pt.PokemonEntity)
-                .WithMany(p => p.PokemonToTypes)
-                .HasForeignKey(pt => pt.PokemonEntityId);
-
-            modelBuilder.Entity<PokemonToType>()
-                .HasOne(pt => pt.PokemonType)
-                .WithMany(p => p.PokemonToTypes)
-                .HasForeignKey(pt => pt.PokemonTypeId);
-
             modelBuilder.Entity<ContributionSpeaker>()
                 .HasKey(t => new { t.ContributionId, t.SpeakerId });
 

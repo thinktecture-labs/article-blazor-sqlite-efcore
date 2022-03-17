@@ -1,21 +1,11 @@
 ﻿@page "/"
 
-<PageTitle>Index</PageTitle>
+<PageTitle>SQLite Sample Overview</PageTitle>
 
 <MudGrid>
     <MudItem xs="12">
         <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
-            <MudButton OnClick="@(() => NavigateToPage("todos"))" Color="Color.Primary">Todos</MudButton>
-        </MudPaper>
-    </MudItem>
-    <MudItem xs="6">
-        <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
             <MudButton OnClick="@(() => NavigateToPage("contributions"))" Color="Color.Primary">Contributions</MudButton>
-        </MudPaper>
-    </MudItem>
-    <MudItem xs="6">
-        <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
-            <MudButton OnClick="@(() => NavigateToPage("pokemons"))" Color="Color.Primary">Pokemons</MudButton>
         </MudPaper>
     </MudItem>
 </MudGrid>
