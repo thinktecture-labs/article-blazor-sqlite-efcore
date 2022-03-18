@@ -1,10 +1,9 @@
-﻿@page "/contributions"
+﻿@page "/"
 
 <PageTitle>Thinktecture Contributions</PageTitle>
-<MudAppBar Elevation="2">
-    <MudIconButton Icon="@Icons.Filled.ArrowBack" OnClick="NavigateBack"></MudIconButton>
+<MudAppBar>
     <MudSpacer />
-    <MudTextField Placeholder="Search for Contribution" 
+    <MudTextField Placeholder="Search for Contribution"                  
                   Adornment="Adornment.End" 
                   AdornmentIcon="@Icons.Filled.Search" 
                   AdornmentColor="Color.Primary" 
@@ -12,7 +11,7 @@
                   Value="_searchTerm" 
                   ValueChanged="(string term) => Search(term)"></MudTextField>
     <MudSpacer />
-    <MudIconButton Style="@(_isInitilazing ? "opacity: 0" : "opacity: 1")" Icon="@Icons.Outlined.AddCircle" OnClick="() => CreateOrUpdateContribution()"></MudIconButton>    
+    <MudIconButton Color="Color.Primary" Icon="@Icons.Outlined.AddCircle" OnClick="() => CreateOrUpdateContribution()"></MudIconButton>
 </MudAppBar>
 
 

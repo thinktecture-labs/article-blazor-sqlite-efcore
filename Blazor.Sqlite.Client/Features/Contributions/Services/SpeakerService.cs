@@ -6,13 +6,13 @@ namespace Blazor.Sqlite.Client.Features.Contributions.Services
 {
     public class SpeakerService
     {
-        private readonly ContributionDbContext _dbContext;
+        private readonly IDbContextFactory<ContributionDbContext> _factory;
         private readonly HttpClient _httpClient;
 
         private bool _hasSynced = false;
-        public SpeakerService(ContributionDbContext dbContext, HttpClient httpClient)
+        public SpeakerService(IDbContextFactory<ContributionDbContext> factory, HttpClient httpClient)
         {
-            _dbContext = dbContext;
+            _factory = factory;
             _httpClient = httpClient;
         }
 
@@ -20,19 +20,23 @@ namespace Blazor.Sqlite.Client.Features.Contributions.Services
         {
             if (_hasSynced) return;
 
-            if (_dbContext.Speakers.Count() > 0) return;
+            await using var dbContext = await _factory.CreateDbContextAsync();
+            await using var tx = await dbContext.Database.BeginTransactionAsync();
+            if (dbContext.Speakers.Count() > 0) return;
 
             var result = await _httpClient.GetFromJsonAsync<Root<Speaker>>("/sample-data/speakers.json");
             if (result != null)
             {
-                await _dbContext.Speakers.AddRangeAsync(result.Items);
+                await dbContext.Speakers.AddRangeAsync(result.Items);
             }
-
+            await dbContext.SaveChangesAsync();
+            await tx.CommitAsync();
         }
 
-        public Task<List<Speaker>> GetSpeakersAsync()
+        public async Task<List<Speaker>> GetSpeakersAsync()
         {
-            return _dbContext.Speakers.ToListAsync();
+            await using var dbContext = await _factory.CreateDbContextAsync();
+            return await dbContext.Speakers.ToListAsync();
         }
 
     }

@@ -1,5 +1,3 @@
-using Blazor.Sqlite.Client.Services;
-using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
 namespace Blazor.Sqlite.Client.Shared

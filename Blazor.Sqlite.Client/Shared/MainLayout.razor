@@ -5,7 +5,6 @@
 <MudSnackbarProvider />
 <MudLayout>
     <MudAppBar>
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" OnClick="ToggleMenu"></MudIconButton>
         <MudSpacer />
         <MudHidden Breakpoint="Breakpoint.Md" Invert="true">
             <MudText Typo="Typo.h5"> EF Core with Sqlite in Blazor WASM</MudText>
@@ -15,12 +14,6 @@
         </MudHidden>
         <MudSpacer />
     </MudAppBar>
-    <MudDrawer @bind-Open="_open" Breakpoint="Breakpoint.Md" Elevation="2" Variant="DrawerVariant.Mini" ClipMode="DrawerClipMode.Docked">
-        <MudNavMenu>
-            <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Dashboard" Href="/">Dashboard</MudNavLink>
-            <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.ViewList" Href="/contributions">Contributions</MudNavLink>
-        </MudNavMenu>
-    </MudDrawer>
     <MudMainContent>
         <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="pa-4">
             @Body

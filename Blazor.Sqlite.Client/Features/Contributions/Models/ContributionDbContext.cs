@@ -17,6 +17,7 @@ namespace Blazor.Sqlite.Client.Features.Contributions.Models
             , IJSRuntime jsRuntime)
         : base(options)
         {
+            // REVIEW: Nicht im Konstruktor machen, auslagern
             _moduleTask = new(() => jsRuntime.InvokeAsync<IJSObjectReference>(
                "import", "./js/file.js").AsTask());
         }
@@ -39,14 +40,12 @@ namespace Blazor.Sqlite.Client.Features.Contributions.Models
             base.OnModelCreating(modelBuilder);
         }
 
-#if RELEASE
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
             options.LogTo(Console.WriteLine, LogLevel.Error)
                    .EnableDetailedErrors()
                    .EnableSensitiveDataLogging(false);
         }
-#endif
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {

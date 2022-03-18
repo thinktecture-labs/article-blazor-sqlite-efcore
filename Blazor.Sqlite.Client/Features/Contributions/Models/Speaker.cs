@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace Blazor.Sqlite.Client.Features.Contributions.Models;
+﻿namespace Blazor.Sqlite.Client.Features.Contributions.Models;
 
 public class Speaker
 {

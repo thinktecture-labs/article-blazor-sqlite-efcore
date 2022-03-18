@@ -1,19 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.JSInterop;
 
-namespace Blazor.Sqlite.Client.Services
+namespace Blazor.Sqlite.Client.Features.Shared.Services
 {
     public class DatabaseService<T>
         where T : DbContext
     {
-#if DEBUG
-        private static string filename = "app.db";
-#else
-        private static string filename = "/database/app.db";
-#endif
+#if RELEASE
+        public static string FileName = "/database/app.db";
         private readonly IDbContextFactory<T> _dbContextFactory;
-
         private readonly Lazy<Task<IJSObjectReference>> _moduleTask;
+#endif
+
 
 
 #if DEBUG
@@ -39,12 +37,12 @@ namespace Blazor.Sqlite.Client.Services
 #if RELEASE
                 var module = await _moduleTask.Value;
                 await module.InvokeVoidAsync("mountAndInitializeDb");
-                if (!File.Exists(filename))
+                if (!File.Exists(FileName))
                 {
-                    File.Create(filename).Close();
+                    File.Create(FileName).Close();
                 }
 
-                var dbContext = await _dbContextFactory.CreateDbContextAsync();
+                await using var dbContext = await _dbContextFactory.CreateDbContextAsync();
                 await dbContext.Database.EnsureCreatedAsync();     
 #endif
             }
