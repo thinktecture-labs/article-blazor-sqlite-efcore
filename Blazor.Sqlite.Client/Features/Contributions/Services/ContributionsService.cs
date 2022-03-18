@@ -1,17 +1,16 @@
-﻿using Blazor.Sqlite.Client.Data;
-using Blazor.Sqlite.Client.Features.Conferences.Models;
+﻿using Blazor.Sqlite.Client.Features.Contributions.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Http.Json;
 
-namespace Blazor.Sqlite.Client.Features.Conferences.Services
+namespace Blazor.Sqlite.Client.Features.Contributions.Services
 {
     public class ContributionsService
     {
-        private readonly DatabaseContext _dbContext;
+        private readonly ContributionDbContext _dbContext;
         private readonly HttpClient _httpClient;
 
         private bool _hasSynced = false;
-        public ContributionsService(DatabaseContext dbContext, HttpClient httpClient)
+        public ContributionsService(ContributionDbContext dbContext, HttpClient httpClient)
         {
             _dbContext = dbContext;
             _httpClient = httpClient;
@@ -23,8 +22,6 @@ namespace Blazor.Sqlite.Client.Features.Conferences.Services
 
             if (_dbContext.Contributions.Count() > 0) return;
 
-            await SyncSpeakers();
-
             var result = await _httpClient.GetFromJsonAsync<Root<ContributionDto>>("/sample-data/contributions.json");
             if (result?.Items.Count > 0)
             {
@@ -32,6 +29,10 @@ namespace Blazor.Sqlite.Client.Features.Conferences.Services
                 result.Items.ForEach(item =>
                 {
                     item.Id = index++;
+                    if (DateTime.TryParse(item.Date, out var startDate))
+                    {
+                        item.StartDate = startDate;
+                    }                    
                     _dbContext.Contributions.Add(item);
                     if (item.Speaker.Any())
                     {
@@ -51,9 +52,14 @@ namespace Blazor.Sqlite.Client.Features.Conferences.Services
             _hasSynced = true;
         }
 
-        public Task<List<Contribution>> GetContributions(int skip = 0, int take = Int32.MaxValue, CancellationToken cancellationToken = default)
+        public Task<List<Contribution>> GetContributions(int skip = 0, int take = Int32.MaxValue, string searchTerm = "", CancellationToken cancellationToken = default)
         {
-            return _dbContext.Contributions.Include(c => c.ContributionSpeakers).ThenInclude(cs => cs.Speaker).Skip(skip).Take(take).ToListAsync(cancellationToken);
+            var query = String.IsNullOrWhiteSpace(searchTerm) 
+                ? _dbContext.Contributions.Include(c => c.ContributionSpeakers).ThenInclude(cs => cs.Speaker)
+                : _dbContext.Contributions.Include(c => c.ContributionSpeakers).ThenInclude(cs => cs.Speaker)
+                                          .Where(c => EF.Functions.Like(c.Title, $"%{searchTerm}%"));
+
+            return query.OrderBy(c => c.Title).Skip(skip).Take(take).ToListAsync(cancellationToken);
         }
 
         public Task<int> GetContributionCount(CancellationToken cancellationToken = default)
@@ -139,21 +145,6 @@ namespace Blazor.Sqlite.Client.Features.Conferences.Services
                 Console.WriteLine(e.Message);
             }
             return false;
-        }
-
-        public Task<List<Speaker>> GetSpeakersAsync()
-        {
-            return _dbContext.Speakers.ToListAsync();
-        }
-
-        private async Task SyncSpeakers()
-        {
-            var result = await _httpClient.GetFromJsonAsync<Root<Speaker>>("/sample-data/speakers.json");
-            if (result != null)
-            {
-                await _dbContext.Speakers.AddRangeAsync(result.Items);
-            }
-
         }
     }
 }

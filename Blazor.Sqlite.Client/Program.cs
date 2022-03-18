@@ -1,6 +1,7 @@
 using Blazor.Sqlite.Client;
-using Blazor.Sqlite.Client.Data;
-using Blazor.Sqlite.Client.Features.Conferences.Services;
+using Blazor.Sqlite.Client.Features.Contributions;
+using Blazor.Sqlite.Client.Features.Contributions.Models;
+using Blazor.Sqlite.Client.Features.Contributions.Services;
 using Blazor.Sqlite.Client.Services;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -14,7 +15,7 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 #if DEBUG
-builder.Services.AddDbContext<DatabaseContext>(
+builder.Services.AddDbContext<ContributionDbContext>(
             options => options.UseInMemoryDatabase("BlazorSqlite"));
 #else
 builder.Services.AddDbContextFactory<DatabaseContext>(
@@ -24,13 +25,14 @@ builder.Services.AddDbContextFactory<DatabaseContext>(
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddMudServices();
 
-builder.Services.AddSingleton<DatabaseService>();
-builder.Services.AddScoped<ContributionsService>();
+builder.Services.AddSingleton<DatabaseService<ContributionDbContext>>();
+builder.Services.AddContributionsFeature();
 
 var host = builder.Build();
 
-var dbService = host.Services.GetRequiredService<DatabaseService>();
+var dbService = host.Services.GetRequiredService<DatabaseService<ContributionDbContext>>();
 await dbService.InitDatabaseAsync();
+await host.InitializeContributionsFeature();
 await host.RunAsync();
 
 public partial class Program

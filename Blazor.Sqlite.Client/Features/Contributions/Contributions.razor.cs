@@ -1,12 +1,12 @@
-using Blazor.Sqlite.Client.Features.Conferences.Components;
-using Blazor.Sqlite.Client.Features.Conferences.Models;
-using Blazor.Sqlite.Client.Features.Conferences.Services;
+using Blazor.Sqlite.Client.Features.Contributions.Components;
+using Blazor.Sqlite.Client.Features.Contributions.Models;
+using Blazor.Sqlite.Client.Features.Contributions.Services;
 using Blazor.Sqlite.Client.Features.Shared.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web.Virtualization;
 using MudBlazor;
 
-namespace Blazor.Sqlite.Client.Features.Conferences
+namespace Blazor.Sqlite.Client.Features.Contributions
 {
     public partial class Contributions
     {
@@ -14,15 +14,9 @@ namespace Blazor.Sqlite.Client.Features.Conferences
         [Inject] private IDialogService _dialogService { get; set; } = default!;
         [Inject] private NavigationManager _navigationManager { get; set; } = default!;
 
-        private bool _isInitilazing = true;
+        private bool _isInitilazing = false;
         private Virtualize<Contribution>? _virtualize;
-
-        protected override async Task OnInitializedAsync()
-        {
-            await _contributionsService.InitAsync();
-            _isInitilazing = false;
-            await base.OnInitializedAsync();
-        }
+        private string _searchTerm = string.Empty;
 
         private string SpeakerString(Contribution contribution)
         {
@@ -42,13 +36,22 @@ namespace Blazor.Sqlite.Client.Features.Conferences
             {
                 var count = await _contributionsService.GetContributionCount(request.CancellationToken);
                 var totalCount = Math.Min(request.Count, count - request.StartIndex);
-                var result = await _contributionsService.GetContributions(request.StartIndex, totalCount, request.CancellationToken);
+                var result = await _contributionsService.GetContributions(request.StartIndex, totalCount, _searchTerm, request.CancellationToken);
                 return new ItemsProviderResult<Contribution>(result, count);
             }
             catch (OperationCanceledException)
             {
                 Console.WriteLine("Current request was canceled.");
                 return new ItemsProviderResult<Contribution>(new List<Contribution>(), 0);
+            }
+        }
+
+        private async Task Search(string term)
+        {
+            _searchTerm = term;
+            if (_virtualize != null)
+            {
+                await _virtualize.RefreshDataAsync();
             }
         }
 

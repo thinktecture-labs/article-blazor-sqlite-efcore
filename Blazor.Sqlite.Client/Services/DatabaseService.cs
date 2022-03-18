@@ -1,17 +1,17 @@
-﻿using Blazor.Sqlite.Client.Data;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.JSInterop;
 
 namespace Blazor.Sqlite.Client.Services
 {
-    public class DatabaseService
+    public class DatabaseService<T>
+        where T : DbContext
     {
 #if DEBUG
         private static string filename = "app.db";
 #else
         private static string filename = "/database/app.db";
 #endif
-        private readonly IDbContextFactory<DatabaseContext> _dbContextFactory;
+        private readonly IDbContextFactory<T> _dbContextFactory;
 
         private readonly Lazy<Task<IJSObjectReference>> _moduleTask;
 
@@ -22,7 +22,7 @@ namespace Blazor.Sqlite.Client.Services
         }
 #else
         public DatabaseService(IJSRuntime jsRuntime
-            , IDbContextFactory<DatabaseContext> dbContextFactory)
+            , IDbContextFactory<T> dbContextFactory)
         {
             if (jsRuntime == null) throw new ArgumentNullException(nameof(jsRuntime));
             _dbContextFactory = dbContextFactory ?? throw new ArgumentNullException(nameof(dbContextFactory));

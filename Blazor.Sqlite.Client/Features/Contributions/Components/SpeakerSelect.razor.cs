@@ -1,12 +1,12 @@
-using Blazor.Sqlite.Client.Features.Conferences.Models;
-using Blazor.Sqlite.Client.Features.Conferences.Services;
+using Blazor.Sqlite.Client.Features.Contributions.Models;
+using Blazor.Sqlite.Client.Features.Contributions.Services;
 using Microsoft.AspNetCore.Components;
 
-namespace Blazor.Sqlite.Client.Features.Conferences.Components
+namespace Blazor.Sqlite.Client.Features.Contributions.Components
 {
     public partial class SpeakerSelect
     {
-        [Inject] private ContributionsService _contributionsService { get; set; } = default!;
+        [Inject] private SpeakerService _speakersService { get; set; } = default!;
         [Parameter] public string Label { get; set; }
         [Parameter] public List<int> SelectedSpeakers { get; set; } = new List<int>();
         [Parameter] public EventCallback<List<int>> SelectedSpeakersChanged { get; set; }
@@ -19,7 +19,7 @@ namespace Blazor.Sqlite.Client.Features.Conferences.Components
             {
                 _selectedSpeakers.AddRange(SelectedSpeakers);
             }
-            _speakers = await _contributionsService.GetSpeakersAsync();
+            _speakers = await _speakersService.GetSpeakersAsync();
             await base.OnInitializedAsync();
         }
 

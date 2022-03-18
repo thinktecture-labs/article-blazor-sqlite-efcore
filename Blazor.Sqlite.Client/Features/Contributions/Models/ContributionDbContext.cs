@@ -1,20 +1,19 @@
-﻿using Blazor.Sqlite.Client.Features.Conferences.Models;
+﻿using Blazor.Sqlite.Client.Features.Contributions.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.JSInterop;
 using MudBlazor;
 
-namespace Blazor.Sqlite.Client.Data
+namespace Blazor.Sqlite.Client.Features.Contributions.Models
 {
-    public class DatabaseContext : DbContext
+    public class ContributionDbContext : DbContext
     {
-        public DbSet<TodoItem> Todos { get; set; }
         public DbSet<Contribution> Contributions { get; set; }
         public DbSet<Speaker> Speakers { get; set; }
         public DbSet<ContributionSpeaker> ContributionSpeakers { get; set; }
 
         private readonly Lazy<Task<IJSObjectReference>> _moduleTask;
 
-        public DatabaseContext(DbContextOptions<DatabaseContext> options
+        public ContributionDbContext(DbContextOptions<ContributionDbContext> options
             , IJSRuntime jsRuntime)
         : base(options)
         {
@@ -65,12 +64,5 @@ namespace Blazor.Sqlite.Client.Data
             await module.InvokeVoidAsync("syncDatabase", false, cancellationToken);
             Console.WriteLine("Finish save database");
         }
-    }
-
-    public class TodoItem
-    {
-        public int Id { get; set; }
-        public string Title { get; set; } = string.Empty;
-        public string Description { get; set; } = string.Empty;
     }
 }

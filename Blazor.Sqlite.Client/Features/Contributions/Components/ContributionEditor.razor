@@ -1,0 +1,23 @@
+﻿<EditForm Model="_editModel" OnValidSubmit="SaveContribution">
+    <MudDialog>
+        <DialogContent>
+            @if (_editModel != null)
+            {
+                <div class="d-flex flex-column full-width" style="gap: 1rem;">
+                    <MudTextField Label="Title" @bind-Value="_editModel.Title"></MudTextField>
+                    <MudTextField Label="Type" @bind-Value="_editModel.Type"></MudTextField>
+                    <MudTextField Label="Primary tag" @bind-Value="_editModel.PrimaryTag"></MudTextField>
+                    <MudDatePicker Label="Date" @bind-Date="_editModel.StartDate" ></MudDatePicker>
+                    <div class="checkbox-wrapper">
+                        <MudCheckBox Label="External speaker" @bind-Checked="_editModel.ExternalSpeaker"></MudCheckBox>
+                    </div>                    
+                    <SpeakerSelect Label="Speakers" SelectedSpeakers="_selectedSpeakers" SelectedSpeakersChanged="OnSpeakerSelectionChanged"></SpeakerSelect>
+                </div>
+            }
+        </DialogContent>
+        <DialogActions>
+            <MudButton OnClick="Cancel">Cancel</MudButton>
+            <MudButton Color="Color.Primary" Variant="Variant.Filled" ButtonType="ButtonType.Submit">Save</MudButton>
+        </DialogActions>
+    </MudDialog>
+</EditForm>

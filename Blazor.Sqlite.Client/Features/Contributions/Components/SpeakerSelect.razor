@@ -1,4 +1,4 @@
-﻿@using Blazor.Sqlite.Client.Features.Conferences.Models
+﻿@using Blazor.Sqlite.Client.Features.Contributions.Models
 @if (_speakers.Count > 0)
 {
     <MudSelect Label="@Label" T=int MultiSelection="true" SelectedValues="_selectedSpeakers" SelectedValuesChanged="OnSpeakerSelectionChanged" ToStringFunc="GetSpeakerString">
