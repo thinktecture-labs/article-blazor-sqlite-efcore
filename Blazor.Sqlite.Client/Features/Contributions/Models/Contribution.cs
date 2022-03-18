@@ -10,7 +10,7 @@ public class Contribution
     public int Id { get; set; }
     public string Type { get; set; } = string.Empty;
     public string Title { get; set; } = string.Empty;
-    public string Date { get; set; } = String.Empty;
+    public DateTime? StartDate { get; set; }
     public string Language { get; set; } = string.Empty;
     public bool Billed { get; set; }
     public string Abstract { get; set; } = string.Empty;
