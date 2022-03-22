@@ -1,4 +1,17 @@
-﻿export function mountAndInitializeDb() {
+﻿export function writeIndexedDbChange() {
+    localStorage.setItem('lastChange', new Date(Date.now()).toUTCString());
+}
+
+export function registerStorageChangedEvent(ref) {
+    window.addEventListener('storage', () => {
+        // When local storage changes, dump the list to
+        // the console.
+        console.log('storage changed', localStorage.getItem('lastChange'));
+        ref.invokeMethodAsync('HandleStorageChanged');
+    });
+}
+
+export function mountAndInitializeDb() {
     FS.mkdir('/database');
     FS.mount(IDBFS, {}, '/database');
     return syncDatabase(true);

@@ -3,13 +3,16 @@ using Microsoft.JSInterop;
 
 namespace Blazor.Sqlite.Client.Features.Shared.Services
 {
-    public class DatabaseService<T>
+    public class DatabaseService<T> : IDisposable
         where T : DbContext
     {
+        public event EventHandler<EventArgs> DatabaseChanged;
+
 #if RELEASE
         public static string FileName = "/database/app.db";
         private readonly IDbContextFactory<T> _dbContextFactory;
         private readonly Lazy<Task<IJSObjectReference>> _moduleTask;
+        private DotNetObjectReference<DatabaseService<T>>? _reference;
 #endif
 
 
@@ -35,8 +38,13 @@ namespace Blazor.Sqlite.Client.Features.Shared.Services
             try
             {
 #if RELEASE
+                if (_reference == null)
+                {
+                    _reference = DotNetObjectReference.Create(this);
+                }
                 var module = await _moduleTask.Value;
                 await module.InvokeVoidAsync("mountAndInitializeDb");
+                await module.InvokeVoidAsync("registerStorageChangedEvent", _reference);
                 if (!File.Exists(FileName))
                 {
                     File.Create(FileName).Close();
@@ -51,5 +59,18 @@ namespace Blazor.Sqlite.Client.Features.Shared.Services
                 Console.WriteLine(ex.GetType().Name, ex.Message);
             }
         }
+
+        [JSInvokable]
+        public async Task HandleStorageChanged()
+        {
+            Console.WriteLine("Local storage changed!");
+#if RELEASE
+            var module = await _moduleTask.Value;
+            await module.InvokeVoidAsync("syncDatabase", true);
+            DatabaseChanged?.Invoke(this, new EventArgs());
+#endif
+        }
+
+        public void Dispose() => _reference?.Dispose();
     }
 }

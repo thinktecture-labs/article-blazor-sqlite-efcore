@@ -2,6 +2,7 @@ using Blazor.Sqlite.Client.Features.Contributions.Components;
 using Blazor.Sqlite.Client.Features.Contributions.Models;
 using Blazor.Sqlite.Client.Features.Contributions.Services;
 using Blazor.Sqlite.Client.Features.Shared.Components;
+using Blazor.Sqlite.Client.Features.Shared.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web.Virtualization;
 using MudBlazor;
@@ -11,12 +12,29 @@ namespace Blazor.Sqlite.Client.Features.Contributions
     public partial class Contributions
     {
         [Inject] private ContributionsService _contributionsService { get; set; } = default!;
+        [Inject] private DatabaseService<ContributionDbContext> _dbService { get; set; } = default!;
         [Inject] private IDialogService _dialogService { get; set; } = default!;
         [Inject] private NavigationManager _navigationManager { get; set; } = default!;
 
         private bool _isInitilazing = false;
         private Virtualize<Contribution>? _virtualize;
         private string _searchTerm = string.Empty;
+
+        protected override Task OnAfterRenderAsync(bool firstRender)
+        {
+            if (firstRender)
+            {
+                _dbService.DatabaseChanged += async (s, e) =>
+                {
+                    if (_virtualize != null)
+                    {
+                        await _virtualize.RefreshDataAsync();
+                        await InvokeAsync(StateHasChanged);
+                    }
+                };
+            }
+            return base.OnAfterRenderAsync(firstRender);
+        }
 
         private string SpeakerString(Contribution contribution)
         {
