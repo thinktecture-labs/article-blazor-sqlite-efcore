@@ -21,7 +21,6 @@ namespace Blazor.Sqlite.Client.Features.Contributions.Services
             if (_hasSynced) return;
 
             await using var dbContext = await _factory.CreateDbContextAsync();
-            await using var tx = await dbContext.Database.BeginTransactionAsync();
             if (dbContext.Speakers.Count() > 0) return;
 
             var result = await _httpClient.GetFromJsonAsync<Root<Speaker>>("/sample-data/speakers.json");
@@ -30,7 +29,6 @@ namespace Blazor.Sqlite.Client.Features.Contributions.Services
                 await dbContext.Speakers.AddRangeAsync(result.Items);
             }
             await dbContext.SaveChangesAsync();
-            await tx.CommitAsync();
         }
 
         public async Task<List<Speaker>> GetSpeakersAsync()

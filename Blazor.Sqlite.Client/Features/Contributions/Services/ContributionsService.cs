@@ -22,7 +22,6 @@ namespace Blazor.Sqlite.Client.Features.Contributions.Services
             if (_hasSynced) return;
 
             await using var dbContext = await _factory.CreateDbContextAsync();
-            await using var tx = await dbContext.Database.BeginTransactionAsync();
             if (dbContext.Contributions.Count() > 0) return;
 
             var result = await _httpClient.GetFromJsonAsync<Root<ContributionDto>>("/sample-data/contributions.json");
@@ -53,7 +52,6 @@ namespace Blazor.Sqlite.Client.Features.Contributions.Services
             }
 
             await dbContext.SaveChangesAsync();
-            await tx.CommitAsync();
             _hasSynced = true;
         }
 
@@ -82,7 +80,6 @@ namespace Blazor.Sqlite.Client.Features.Contributions.Services
             {
 
                 await using var dbContext = await _factory.CreateDbContextAsync();
-                await using var tx = await dbContext.Database.BeginTransactionAsync();
                 if (contribution.Id != 0)
                 {
                     var currentContribution = await dbContext.Contributions.Include(c => c.ContributionSpeakers).FirstOrDefaultAsync(c => c.Id == contribution.Id);
@@ -132,7 +129,6 @@ namespace Blazor.Sqlite.Client.Features.Contributions.Services
                     }
                 }
                 await dbContext.SaveChangesAsync();
-                await tx.CommitAsync();
                 return true;
             }
             catch (Exception e)
@@ -147,13 +143,11 @@ namespace Blazor.Sqlite.Client.Features.Contributions.Services
             try
             {
                 await using var dbContext = await _factory.CreateDbContextAsync();
-                await using var tx = await dbContext.Database.BeginTransactionAsync();
                 var currentContribution = await dbContext.Contributions.FirstOrDefaultAsync(c => c.Id == id);
                 if (currentContribution != null)
                 {
                     dbContext.Contributions.Remove(currentContribution);
                     await dbContext.SaveChangesAsync();
-                    await tx.CommitAsync();
                     return true;
                 }
             }
