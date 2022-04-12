@@ -60,6 +60,15 @@ namespace Blazor.Sqlite.Client.Features.Shared.Services
             }
         }
 
+        public async Task SyncDatabase(CancellationToken cancellationToken)
+        {
+            Console.WriteLine("Start saving database");
+            var module = await _moduleTask.Value;
+            await module.InvokeVoidAsync("syncDatabase", false, cancellationToken);
+            await module.InvokeVoidAsync("writeIndexedDbChange", cancellationToken);
+            Console.WriteLine("Finish save database");
+        }
+
         [JSInvokable]
         public async Task HandleStorageChanged()
         {

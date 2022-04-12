@@ -1,4 +1,5 @@
 ﻿using Blazor.Sqlite.Client.Features.Contributions.Models;
+using Blazor.Sqlite.Client.Features.Shared.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.JSInterop;
 using MudBlazor;
@@ -12,14 +13,13 @@ namespace Blazor.Sqlite.Client.Features.Contributions.Models
         public DbSet<ContributionSpeaker> ContributionSpeakers { get; set; }
 
         private readonly Lazy<Task<IJSObjectReference>> _moduleTask;
+        private readonly Shared.Services.DatabaseService<ContributionDbContext> _databaseService;
 
         public ContributionDbContext(DbContextOptions<ContributionDbContext> options
-            , IJSRuntime jsRuntime)
+            , DatabaseService<ContributionDbContext> databaseService)
         : base(options)
         {
-            // REVIEW: Nicht im Konstruktor machen, auslagern
-            _moduleTask = new(() => jsRuntime.InvokeAsync<IJSObjectReference>(
-               "import", "./js/file.js").AsTask());
+            _databaseService = databaseService;
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -58,11 +58,7 @@ namespace Blazor.Sqlite.Client.Features.Contributions.Models
 
         private async Task PersistDatabaseAsync(CancellationToken cancellationToken = default)
         {
-            Console.WriteLine("Start saving database");
-            var module = await _moduleTask.Value;
-            await module.InvokeVoidAsync("syncDatabase", false, cancellationToken);
-            await module.InvokeVoidAsync("writeIndexedDbChange", cancellationToken);
-            Console.WriteLine("Finish save database");
+            await _databaseService.SyncDatabase(cancellationToken);
         }
     }
 }

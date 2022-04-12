@@ -14,13 +14,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.2" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.2" PrivateAssets="all" />
-		<PackageReference Include="MudBlazor" Version="6.0.6" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.3" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.3" PrivateAssets="all" />
+		<PackageReference Include="MudBlazor" Version="6.0.9" />
 		<!-- EF Core and SQLite support -->
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.2" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.3" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.3" />
-		<PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="2.1.0-pre20220207221914" />
+		<PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="2.1.0-pre20220318192836" />
 	</ItemGroup>
 
 	<ItemGroup>
