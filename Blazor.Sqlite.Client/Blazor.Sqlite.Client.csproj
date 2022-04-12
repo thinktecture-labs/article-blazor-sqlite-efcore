@@ -5,7 +5,7 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<PublishTrimmed>true</PublishTrimmed>
-		<EmccExtraLDFlags>-lidbfs.js -s ERROR_ON_UNDEFINED_SYMBOLS=0</EmccExtraLDFlags>
+		<EmccExtraLDFlags>-lidbfs.js</EmccExtraLDFlags>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
 
@@ -20,7 +20,7 @@
 		<!-- EF Core and SQLite support -->
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.2" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.3" />
-		<PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="2.1.0-pre20220207221914" />
+		<PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="2.1.0-pre20220318192836" />
 	</ItemGroup>
 
 	<ItemGroup>
